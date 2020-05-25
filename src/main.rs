@@ -61,14 +61,91 @@ fn main() {
   scores.insert(String::from("Blue"), 10);
   scores.insert(String::from("Yellow"), 50);
 
-
   let teams = vec![String::from("Blue"), String::from("Yellow")];
   let initial_scores = vec![10, 50];
 
-  let _scores: HashMap<_, _> =
-      teams.into_iter().zip(initial_scores.into_iter()).collect();
+  let _scores: HashMap<_, _> = teams.into_iter().zip(initial_scores.into_iter()).collect();
+
+  let mut scores = HashMap::new();
+  scores.insert(String::from("Blue"), 10);
+
+  scores.entry(String::from("Yellow")).or_insert(50);
+  scores.entry(String::from("Blue")).or_insert(50);
+
+  println!("{:?}", scores);
+  print_divider();
+
+  let text = "hello world wonderful world";
+
+  let mut map = HashMap::new();
+
+  for word in text.split_whitespace() {
+    let count = map.entry(word).or_insert(0);
+    *count += 1;
+  }
+
+  println!("{:?}", map);
+  print_divider();
+
+  exercise1();
+  print_divider();
 }
 
 fn print_divider() {
   println!("{}", "-".repeat(50));
+}
+
+/*
+Given a list of integers, use a vector and return the mean (the average value),
+median (when sorted, the value in the middle position),
+and mode (the value that occurs most often; a hash map will be helpful here) of the list.
+*/
+fn exercise1() {
+  let mut list = vec![5, 17, 88, 42, 17, 14, 5, 17, 120, 120];
+
+  list.sort();
+  println!("list: {:?}", list);
+
+  println!("Average: {}", mean(&list));
+
+  println!("Median: {}", median(&list));
+
+  println!("Mode: {}", mode(&list));
+}
+
+fn mean(list: &[i32]) -> f64 {
+  let mut avg = 0;
+  let len = list.len();
+  for i in list {
+    avg += i;
+  }
+  f64::from(avg) / len as f64
+}
+
+fn median(list: &[i32]) -> i32 {
+  let len = list.len();
+  let mid = ((len as f64 - 1.0) / 2.0).round() as usize;
+  println!("{}", mid);
+  list[mid]
+}
+
+fn mode(list: &[i32]) -> i32 {
+  let mut map = HashMap::new();
+
+  for v in list {
+    let count = map.entry(v).or_insert(0);
+    *count += 1;
+  }
+  println!("{:?}", map);
+  let mut maxval = 0;
+  let mut maxkey = list.get(0).unwrap();
+  
+  println!("maxkey: {:?}", maxkey);
+  for (k, v) in map.iter() {
+    if v > &maxval {
+      maxval = *v;
+      maxkey = k;
+    }
+  }
+  *maxkey
 }
