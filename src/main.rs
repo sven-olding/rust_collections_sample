@@ -101,7 +101,7 @@ median (when sorted, the value in the middle position),
 and mode (the value that occurs most often; a hash map will be helpful here) of the list.
 */
 fn exercise1() {
-  let mut list = vec![5, 17, 88, 42, 17, 14, 5, 17, 120, 120];
+  let mut list = vec![5, 17, 88, 42, 5, 14, 5, 17, 5, 120];
 
   list.sort();
   println!("list: {:?}", list);
@@ -131,21 +131,17 @@ fn median(list: &[i32]) -> i32 {
 
 fn mode(list: &[i32]) -> i32 {
   let mut map = HashMap::new();
+  let mut max = (0, 0);
 
   for v in list {
     let count = map.entry(v).or_insert(0);
     *count += 1;
   }
-  println!("{:?}", map);
-  let mut maxval = 0;
-  let mut maxkey = list.get(0).unwrap();
-  
-  println!("maxkey: {:?}", maxkey);
+
   for (k, v) in map.iter() {
-    if v > &maxval {
-      maxval = *v;
-      maxkey = k;
-    }
+    if v > &max.1 {
+      max = (**k, *v);
+    }    
   }
-  *maxkey
+  max.0
 }
