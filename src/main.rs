@@ -89,6 +89,9 @@ fn main() {
 
   exercise1();
   print_divider();
+
+  exercise2();
+  print_divider();
 }
 
 fn print_divider() {
@@ -141,7 +144,34 @@ fn mode(list: &[i32]) -> i32 {
   for (k, v) in map.iter() {
     if v > &max.1 {
       max = (**k, *v);
-    }    
+    }
   }
   max.0
+}
+
+// Convert strings to pig latin. The first consonant of each word is moved to the end of the word and “ay” is added,
+// so “first” becomes “irst-fay.” Words that start with a vowel have “hay” added to the end instead
+// (“apple” becomes “apple-hay”). Keep in mind the details about UTF-8 encoding!
+fn exercise2() {
+  println!("Exercise 2");
+  let first = String::from("first");
+  println!("{} -> {}", first, pig_latin(&first));
+
+  let apple = String::from("apple");
+  println!("{} -> {}", apple, pig_latin(&apple));
+
+  println!("EMPTY -> {}", pig_latin(&String::new()));
+}
+
+fn pig_latin(word: &String) -> String {
+  const VOWELS: [char; 5] = ['a', 'e', 'i', 'o', 'u'];
+
+  if let Some(first_char) = word.chars().next() {      
+    if VOWELS.contains(&first_char) {
+      return format!("{}-hay", word);
+    } else {      
+      return format!("{}-{}ay", &word[first_char.len_utf8()..], first_char);
+    }    
+  }
+  String::new()
 }
